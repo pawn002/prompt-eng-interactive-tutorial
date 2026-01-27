@@ -1,2 +1,11 @@
 .DS_Store
 
+# Claude Code files
+.claude/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Note: Be careful not to commit notebooks with API keys!
+# Use git diff before committing to check for sensitive data
