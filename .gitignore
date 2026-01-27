@@ -7,5 +7,11 @@
 .ipynb_checkpoints/
 */.ipynb_checkpoints/
 
+# Environment files with API keys
+.env
+*/.env
+secrets.py
+*/secrets.py
+
 # Note: Be careful not to commit notebooks with API keys!
 # Use git diff before committing to check for sensitive data
