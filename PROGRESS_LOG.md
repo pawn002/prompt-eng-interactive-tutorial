@@ -36,7 +36,11 @@ python -m notebook
 ### Configuration Steps
 
 1. **Opened Notebook**: `00_Tutorial_How-To.ipynb`
-2. **Added API Key**: Set `API_KEY` variable in notebook cell
+2. **Configured API Key Securely**:
+   - Created `.env` file in `Anthropic 1P/` directory
+   - Added `ANTHROPIC_API_KEY` and `MODEL_NAME` to `.env`
+   - Installed `python-dotenv` package
+   - Updated notebook to load credentials from `.env` file
 3. **Set Model**: Using `MODEL_NAME = "claude-3-haiku-20240307"`
 4. **Added Credits**: Purchased API credits at https://console.anthropic.com/
 5. **Tested API**: Successfully ran test prompt "Hello, Claude!"
@@ -67,6 +71,15 @@ python -m notebook
 #### Special Jupyter Syntax
 - `!pip install package` - Runs shell commands from within notebook
 - `%store variable` - Stores variables across notebooks
+
+#### API Key Configuration
+The notebook now loads API credentials from `.env` file:
+```bash
+# Edit Anthropic 1P/.env and add your API key
+ANTHROPIC_API_KEY=sk-ant-api03-...
+MODEL_NAME=claude-3-haiku-20240307
+```
+The `.env` file is protected by `.gitignore` and won't be committed.
 
 ### Tutorial Structure
 
@@ -113,10 +126,24 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 ```
 - **Resolution**: Added credits via Plans & Billing at console.anthropic.com
 
+### Security Configuration
+
+**Protected Files Added to `.gitignore`:**
+- `.env` and `*/.env` - Environment files with API keys
+- `secrets.py` and `*/secrets.py` - Python secrets files
+- `.claude/` - Claude Code configuration
+- `.ipynb_checkpoints/` - Jupyter checkpoint files
+
+**Files Created:**
+- `CLAUDE.md` - Repository documentation for Claude Code
+- `PROGRESS_LOG.md` - This file (learning progress tracker)
+- `Anthropic 1P/.env` - Secure API key storage (not committed)
+
 ### Current Status
 ✅ Environment fully set up
 ✅ Jupyter Notebook running
-✅ API key configured and tested
+✅ API key configured securely via .env file
+✅ Git repository configured for personal learning
 ✅ Ready to start Chapter 1
 
 ---
@@ -126,7 +153,17 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 ### Session 1 (2026-01-26)
 - Completed setup and configuration
 - Tested API connection with "Hello, Claude!" prompt
-- **Next**: Begin Chapter 1: Basic Prompt Structure
+- Configured secure API key storage using `.env` file
+- Set up git repository for personal learning with proper .gitignore
+- Created documentation (CLAUDE.md, PROGRESS_LOG.md)
+
+**Git Commits Made:**
+- `ef2cef0` - Add documentation for personal learning environment
+- `3472fef` - Update gitignore for personal learning environment
+- `1f2c0a6` - Add .env and secrets.py to gitignore
+- `f3191a4` - Configure notebook to use .env file for API key
+
+**Next**: Begin Chapter 1: Basic Prompt Structure
 
 ---
 
