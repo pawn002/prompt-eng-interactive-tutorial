@@ -50,13 +50,21 @@ Jupyter will open in your browser with an access token URL.
 
 ### Initial Setup in Notebooks
 
+**Anthropic 1P Setup:**
 1. Open `00_Tutorial_How-To.ipynb` first
-2. Set your API credentials:
-   - **Anthropic 1P**: Set `API_KEY` with Anthropic API key
-   - **Bedrock**: Configure AWS credentials (varies by method)
-3. Set `MODEL_NAME = "claude-3-haiku-20240307"` (or other Claude model)
-4. Run cells with `Shift + Enter` to execute and move to next cell
-5. The `%store` magic command persists variables across notebooks
+2. Install dependencies: `!pip install anthropic python-dotenv`
+3. Create `.env` file in `Anthropic 1P/` directory:
+   ```
+   ANTHROPIC_API_KEY=your_api_key_here
+   MODEL_NAME=claude-3-haiku-20240307
+   ```
+4. The notebook loads credentials from `.env` using `python-dotenv`
+5. Run cells with `Shift + Enter` to execute and move to next cell
+6. The `%store` magic command persists variables across notebooks
+
+**Bedrock Setup:**
+- Configure AWS credentials (varies by method)
+- See respective `00_Tutorial_How-To.ipynb` in Bedrock directories
 
 ### Standard Workflow
 
@@ -97,6 +105,8 @@ Each notebook follows this pattern:
 - **hints.py**: Contains hints for all exercises (both `Anthropic 1P/hints.py` and `AmazonBedrock/utils/hints.py`)
 - **PROGRESS_LOG.md**: User-maintained progress tracking (not part of original repo)
 - **requirements.txt**: Bedrock dependencies only (in `AmazonBedrock/` directory)
+- **.env**: API credentials (in `Anthropic 1P/.env` - not committed, protected by .gitignore)
+- **.gitignore**: Protects `.env`, `secrets.py`, `.claude/`, and `.ipynb_checkpoints/` from being committed
 
 ## Helper Functions Pattern
 
@@ -140,6 +150,8 @@ Users iterate on prompts until passing the grading criteria.
 - API key from https://console.anthropic.com/
 - Requires credits/billing setup
 - Messages API via Anthropic Python SDK
+- **Security**: API key stored in `.env` file (never commit this file)
+- Dependencies: `anthropic`, `python-dotenv`
 
 ### Amazon Bedrock
 - AWS account with Bedrock access enabled
