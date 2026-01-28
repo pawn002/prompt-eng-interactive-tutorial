@@ -85,7 +85,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 
 **Beginner (Chapters 1-3):**
 - [x] Chapter 1: Basic Prompt Structure ✅ Completed (2026-01-27)
-- [ ] Chapter 2: Being Clear and Direct
+- [x] Chapter 2: Being Clear and Direct ✅ Completed (2026-01-27)
 - [ ] Chapter 3: Assigning Roles
 
 **Intermediate (Chapters 4-7):**
@@ -167,15 +167,21 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 
 ### Session 2 (2026-01-27)
 - ✅ Completed Chapter 1: Basic Prompt Structure
+- ✅ Completed Chapter 2: Being Clear and Direct
 - Finished all exercises in `01_Basic_Prompt_Structure.ipynb`
+- Finished all exercises in `02_Being_Clear_and_Direct.ipynb`
 
-**Key Learnings:**
+**Key Learnings from Chapter 1:**
 - Human/Assistant message format
 - Basic prompt structure with Claude
 - How to interact with Claude's API using the Messages format
-- Completed interactive exercises with grading functions
 
-**Next**: Begin Chapter 2: Being Clear and Direct
+**Key Learnings from Chapter 2:**
+- Importance of clear and direct instructions
+- How specificity improves prompt performance
+- Techniques for writing unambiguous prompts
+
+**Next**: Begin Chapter 3: Assigning Roles
 
 ---
 
