@@ -84,7 +84,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 ### Tutorial Structure
 
 **Beginner (Chapters 1-3):**
-- [ ] Chapter 1: Basic Prompt Structure
+- [x] Chapter 1: Basic Prompt Structure ✅ Completed (2026-01-27)
 - [ ] Chapter 2: Being Clear and Direct
 - [ ] Chapter 3: Assigning Roles
 
@@ -164,6 +164,18 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - `f3191a4` - Configure notebook to use .env file for API key
 
 **Next**: Begin Chapter 1: Basic Prompt Structure
+
+### Session 2 (2026-01-27)
+- ✅ Completed Chapter 1: Basic Prompt Structure
+- Finished all exercises in `01_Basic_Prompt_Structure.ipynb`
+
+**Key Learnings:**
+- Human/Assistant message format
+- Basic prompt structure with Claude
+- How to interact with Claude's API using the Messages format
+- Completed interactive exercises with grading functions
+
+**Next**: Begin Chapter 2: Being Clear and Direct
 
 ---
 
