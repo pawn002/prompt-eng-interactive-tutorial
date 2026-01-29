@@ -91,7 +91,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 **Intermediate (Chapters 4-7):**
 - [x] Chapter 4: Separating Data from Instructions ✅ Completed (2026-01-28)
 - [x] Chapter 5: Formatting Output & Speaking for Claude ✅ Completed (2026-01-29)
-- [ ] Chapter 6: Precognition (Thinking Step by Step)
+- [x] Chapter 6: Precognition (Thinking Step by Step) ✅ Completed (2026-01-29)
 - [ ] Chapter 7: Using Examples
 
 **Advanced (Chapters 8-9):**
@@ -220,8 +220,10 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - ✅ Completed Chapter 5: Formatting Output & Speaking for Claude
 - Finished all exercises in `05_Formatting_Output_and_Speaking_for_Claude.ipynb`
 - **Second intermediate chapter complete!**
-- Started Chapter 6: Precognition (Thinking Step by Step)
-- Working through notebook: `06_Precognition_Thinking_Step_by_Step.ipynb`
+- ✅ Completed Chapter 6: Precognition (Thinking Step by Step)
+- Finished all exercises in `06_Precognition_Thinking_Step_by_Step.ipynb`
+- **Third intermediate chapter complete!**
+- Found immediate real-world applications for step-by-step reasoning technique
 
 **Key Learnings from Chapter 5:**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
