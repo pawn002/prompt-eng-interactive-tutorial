@@ -90,7 +90,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 
 **Intermediate (Chapters 4-7):**
 - [x] Chapter 4: Separating Data from Instructions ✅ Completed (2026-01-28)
-- [ ] Chapter 5: Formatting Output & Speaking for Claude
+- [ ] Chapter 5: Formatting Output & Speaking for Claude (🔄 In Progress - at Exercises section)
 - [ ] Chapter 6: Precognition (Thinking Step by Step)
 - [ ] Chapter 7: Using Examples
 
@@ -210,7 +210,13 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - How proper data separation improves prompt reliability and accuracy
 - Using structured formats to handle complex inputs
 
-**Next**: Begin Chapter 5: Formatting Output & Speaking for Claude
+**Current Focus:**
+- Started Chapter 5: Formatting Output & Speaking for Claude
+- Working through notebook: `05_Formatting_Output_and_Speaking_for_Claude.ipynb`
+- Now at: **Exercises section**
+- Learning how to control output format and use prefilling techniques
+
+**Next**: Complete Chapter 5 exercises
 
 ---
 
