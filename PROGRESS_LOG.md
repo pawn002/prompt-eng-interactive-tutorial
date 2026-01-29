@@ -86,7 +86,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 **Beginner (Chapters 1-3):**
 - [x] Chapter 1: Basic Prompt Structure ✅ Completed (2026-01-27)
 - [x] Chapter 2: Being Clear and Direct ✅ Completed (2026-01-27)
-- [ ] Chapter 3: Assigning Roles (🔄 In Progress - Exercises)
+- [x] Chapter 3: Assigning Roles ✅ Completed (2026-01-28)
 
 **Intermediate (Chapters 4-7):**
 - [ ] Chapter 4: Separating Data from Instructions
@@ -190,6 +190,18 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - Preparing to complete Chapter 3 exercises
 
 **Next**: Complete Chapter 3 exercises and move to Chapter 4
+
+### Session 3 (2026-01-28)
+- ✅ Completed Chapter 3: Assigning Roles
+- Finished all exercises in `03_Assigning_Roles_Role_Prompting.ipynb`
+- **Beginner section complete!** (Chapters 1-3 done)
+
+**Key Learnings from Chapter 3:**
+- How to assign roles to Claude using role prompting
+- How roles affect Claude's response style and expertise
+- Techniques for making Claude adopt specific perspectives
+
+**Next**: Begin Chapter 4: Separating Data from Instructions
 
 ---
 
