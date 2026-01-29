@@ -89,7 +89,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 - [x] Chapter 3: Assigning Roles ✅ Completed (2026-01-28)
 
 **Intermediate (Chapters 4-7):**
-- [ ] Chapter 4: Separating Data from Instructions
+- [ ] Chapter 4: Separating Data from Instructions (🔄 In Progress - paused at variable boundaries section)
 - [ ] Chapter 5: Formatting Output & Speaking for Claude
 - [ ] Chapter 6: Precognition (Thinking Step by Step)
 - [ ] Chapter 7: Using Examples
@@ -195,13 +195,21 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - ✅ Completed Chapter 3: Assigning Roles
 - Finished all exercises in `03_Assigning_Roles_Role_Prompting.ipynb`
 - **Beginner section complete!** (Chapters 1-3 done)
+- Started Chapter 4: Separating Data from Instructions
+- Working through notebook: `04_Separating_Data_from_Instructions.ipynb`
+- Paused at: **Section on making sure Claude knows where variables start and end**
 
 **Key Learnings from Chapter 3:**
 - How to assign roles to Claude using role prompting
 - How roles affect Claude's response style and expertise
 - Techniques for making Claude adopt specific perspectives
 
-**Next**: Begin Chapter 4: Separating Data from Instructions
+**Current Focus:**
+- Learning techniques for separating data from instructions
+- Understanding how to use delimiters/XML tags to mark variable boundaries
+- Exploring how clear data boundaries improve prompt reliability
+
+**Next**: Continue Chapter 4 from variable boundaries section
 
 ---
 
