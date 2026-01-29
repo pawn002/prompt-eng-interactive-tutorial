@@ -90,7 +90,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 
 **Intermediate (Chapters 4-7):**
 - [x] Chapter 4: Separating Data from Instructions ✅ Completed (2026-01-28)
-- [ ] Chapter 5: Formatting Output & Speaking for Claude (🔄 In Progress - at Exercises section)
+- [x] Chapter 5: Formatting Output & Speaking for Claude ✅ Completed (2026-01-29)
 - [ ] Chapter 6: Precognition (Thinking Step by Step)
 - [ ] Chapter 7: Using Examples
 
@@ -211,11 +211,15 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - Using structured formats to handle complex inputs
 - **Practical Application**: XML tags prevent unintended interpretation of user data as instructions (similar to prompt injection protection - when user input contains text that looks like instructions, XML tags make it clear to Claude that it's just data to process, not commands to follow)
 
-**Current Focus:**
+**Previous Session (2026-01-28):**
 - Started Chapter 5: Formatting Output & Speaking for Claude
-- Working through notebook: `05_Formatting_Output_and_Speaking_for_Claude.ipynb`
-- Now at: **Exercises section**
-- Learning how to control output format and use prefilling techniques
+- Completed sanity check on learning progress
+- Captured key insights about XML tags and prefilling
+
+**Current Session (2026-01-29):**
+- ✅ Completed Chapter 5: Formatting Output & Speaking for Claude
+- Finished all exercises in `05_Formatting_Output_and_Speaking_for_Claude.ipynb`
+- **Second intermediate chapter complete!**
 
 **Key Learnings from Chapter 5 (In Progress):**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
