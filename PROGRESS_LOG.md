@@ -220,8 +220,10 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - ✅ Completed Chapter 5: Formatting Output & Speaking for Claude
 - Finished all exercises in `05_Formatting_Output_and_Speaking_for_Claude.ipynb`
 - **Second intermediate chapter complete!**
+- Started Chapter 6: Precognition (Thinking Step by Step)
+- Working through notebook: `06_Precognition_Thinking_Step_by_Step.ipynb`
 
-**Key Learnings from Chapter 5 (In Progress):**
+**Key Learnings from Chapter 5:**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
 - **Use cases for prefilling**:
   - Skip preambles and get straight to content (e.g., start with `<haiku>` tag)
@@ -241,7 +243,7 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
   - This combines: role prompting (Ch 3) + XML data separation (Ch 4) + clear instructions (Ch 2) + output formatting + prefilling (Ch 5)
   - Result: Claude skips preamble and returns parseable, constrained output
 
-**Next**: Complete Chapter 5 exercises
+**Next**: Work through Chapter 6 lesson and complete exercises
 
 ---
 
