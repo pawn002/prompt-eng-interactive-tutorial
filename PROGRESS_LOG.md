@@ -250,5 +250,53 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 ---
 
 ## Notes & Learnings
-*(Add your notes as you progress through the tutorial)*
+
+### Transferability to Air-Gapped & Other LLMs (2026-01-29)
+
+**Context**: Anticipating future work with air-gapped models (Llama, Mistral, etc.). Need to emphasize techniques that transfer beyond Claude-specific features.
+
+**✅ Highly Transferable Techniques (Universal across all LLMs):**
+
+1. **Chain of Thought / Step-by-Step Reasoning (Chapter 6)** ⭐⭐⭐
+   - Most researched and proven technique across ALL LLMs
+   - "Think step by step" improves performance universally
+   - **EMPHASIZE THIS - gold standard technique**
+
+2. **Clear, Specific Instructions (Chapter 2)** ⭐⭐⭐
+   - Most fundamental skill in prompt engineering
+   - Works with every model, every time
+   - Specificity and clarity are always beneficial
+
+3. **Few-Shot Learning with Examples (Chapter 7)** ⭐⭐⭐
+   - Universal and critical for all models
+   - Showing examples teaches patterns effectively
+
+4. **Data/Instruction Separation Principle (Chapter 4)** ⭐⭐
+   - Core concept: Prevent prompt injection by separating user data from instructions
+   - Implementation varies: XML tags (Claude), triple quotes, markdown blocks, JSON (other models)
+   - **Key insight**: Clear boundaries prevent unintended interpretation
+
+5. **Role Prompting (Chapter 3)** ⭐⭐
+   - "You are an expert..." works universally
+   - Implementation may vary (system message vs in-prompt) but concept identical
+
+6. **Structured Output Formatting (Chapter 5)** ⭐⭐
+   - Requesting JSON, XML, lists works everywhere
+   - All models can follow format instructions
+
+**⚠️ Claude-Specific Features (Lower Transferability):**
+
+- **Prefilling** (speaking for Claude) - API-specific, not all models support this
+  - Translation: Use instructions like "Start your response with..." instead
+- **XML tag preference** - Claude particularly likes XML; other models may prefer different delimiters
+- **Constitutional AI behaviors** - Claude's specific training approach
+
+**🎯 Learning Strategy Going Forward:**
+
+- Focus on understanding **underlying principles** rather than specific syntax
+- Mentally translate: "Use XML tags" → "Use clear delimiters appropriate for the model"
+- Chapters to emphasize: 7 (Examples), 8 (Avoiding Hallucinations), 9 (Complex Prompts)
+- When learning Claude-specific features, ask: "What's the core principle here?"
+
+**Key Takeaway**: Learning with Claude builds universal prompt engineering skills. Core principles work everywhere - only implementation details vary.
 
