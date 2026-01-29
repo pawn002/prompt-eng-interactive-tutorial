@@ -224,6 +224,8 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - Finished all exercises in `06_Precognition_Thinking_Step_by_Step.ipynb`
 - **Third intermediate chapter complete!**
 - Found immediate real-world applications for step-by-step reasoning technique
+- Started Chapter 7: Using Examples
+- Working through notebook: `07_Using_Examples.ipynb`
 
 **Key Learnings from Chapter 5:**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
@@ -245,7 +247,7 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
   - This combines: role prompting (Ch 3) + XML data separation (Ch 4) + clear instructions (Ch 2) + output formatting + prefilling (Ch 5)
   - Result: Claude skips preamble and returns parseable, constrained output
 
-**Next**: Work through Chapter 6 lesson and complete exercises
+**Next**: Work through Chapter 7 lesson and complete exercises
 
 ---
 
