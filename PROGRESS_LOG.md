@@ -302,3 +302,41 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 
 **Key Takeaway**: Learning with Claude builds universal prompt engineering skills. Core principles work everywhere - only implementation details vary.
 
+---
+
+### Technical Terminology: Few-Shot Prompting (Chapter 7 - 2026-01-29)
+
+**Context**: First encounter with "few-shot", "zero-shot", "one-shot", "n-shot" terminology. Hadn't seen this in general AI trends/practices feeds.
+
+**Key Insight**: This is **fundamental, current terminology** in technical AI/ML contexts.
+
+**Definitions:**
+- **Zero-shot**: No examples provided, just instructions
+  - Example: "Translate this to French: [text]"
+- **One-shot**: One example provided to demonstrate the pattern
+  - Example: "Cat→Chat. Now translate: Dog→?"
+- **Few-shot**: Multiple examples provided (typically 2-5)
+  - Shows pattern through repeated examples
+- **N-shot**: Generic term for any number of examples
+
+**Where This Terminology is Used:**
+- ✅ Academic research papers on LLMs
+- ✅ Technical documentation (OpenAI, Anthropic, Google AI docs)
+- ✅ Developer and ML practitioner communities
+- ✅ Prompt engineering technical guides
+- ✅ AI research discussions
+
+**Where It's Less Visible:**
+- ❌ Consumer-facing AI products (ChatGPT, Claude.ai UIs)
+- ❌ General tech news and trend articles
+- ❌ Product marketing materials
+- ❌ Non-technical AI content
+
+**Why This Matters:**
+- Core terminology for working with ML teams
+- Standard language in technical documentation
+- Essential for reading research about model capabilities
+- Professional vocabulary for discussing prompt strategies
+
+**Implication**: Moving from consumer AI use into technical prompt engineering territory requires learning this professional vocabulary.
+
