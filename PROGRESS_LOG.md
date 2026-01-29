@@ -89,7 +89,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 - [x] Chapter 3: Assigning Roles ✅ Completed (2026-01-28)
 
 **Intermediate (Chapters 4-7):**
-- [ ] Chapter 4: Separating Data from Instructions (🔄 In Progress - at Exercises section)
+- [x] Chapter 4: Separating Data from Instructions ✅ Completed (2026-01-28)
 - [ ] Chapter 5: Formatting Output & Speaking for Claude
 - [ ] Chapter 6: Precognition (Thinking Step by Step)
 - [ ] Chapter 7: Using Examples
@@ -195,22 +195,22 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - ✅ Completed Chapter 3: Assigning Roles
 - Finished all exercises in `03_Assigning_Roles_Role_Prompting.ipynb`
 - **Beginner section complete!** (Chapters 1-3 done)
-- Started Chapter 4: Separating Data from Instructions
-- Working through notebook: `04_Separating_Data_from_Instructions.ipynb`
-- Completed content sections (variable boundaries, XML tags, etc.)
-- Now at: **Exercises section**
+- ✅ Completed Chapter 4: Separating Data from Instructions
+- Finished all exercises in `04_Separating_Data_and_Instructions.ipynb`
+- **First intermediate chapter complete!**
 
 **Key Learnings from Chapter 3:**
 - How to assign roles to Claude using role prompting
 - How roles affect Claude's response style and expertise
 - Techniques for making Claude adopt specific perspectives
 
-**Current Focus:**
-- Learning techniques for separating data from instructions
-- Understanding how to use delimiters/XML tags to mark variable boundaries
-- Exploring how clear data boundaries improve prompt reliability
+**Key Learnings from Chapter 4:**
+- Separating data from instructions using XML tags and delimiters
+- Making variable boundaries clear to prevent confusion
+- How proper data separation improves prompt reliability and accuracy
+- Using structured formats to handle complex inputs
 
-**Next**: Continue Chapter 4 from variable boundaries section
+**Next**: Begin Chapter 5: Formatting Output & Speaking for Claude
 
 ---
 
