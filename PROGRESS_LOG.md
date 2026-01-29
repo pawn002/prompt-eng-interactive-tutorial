@@ -89,7 +89,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 - [x] Chapter 3: Assigning Roles ✅ Completed (2026-01-28)
 
 **Intermediate (Chapters 4-7):**
-- [ ] Chapter 4: Separating Data from Instructions (🔄 In Progress - paused at variable boundaries section)
+- [ ] Chapter 4: Separating Data from Instructions (🔄 In Progress - at Exercises section)
 - [ ] Chapter 5: Formatting Output & Speaking for Claude
 - [ ] Chapter 6: Precognition (Thinking Step by Step)
 - [ ] Chapter 7: Using Examples
@@ -197,7 +197,8 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - **Beginner section complete!** (Chapters 1-3 done)
 - Started Chapter 4: Separating Data from Instructions
 - Working through notebook: `04_Separating_Data_from_Instructions.ipynb`
-- Paused at: **Section on making sure Claude knows where variables start and end**
+- Completed content sections (variable boundaries, XML tags, etc.)
+- Now at: **Exercises section**
 
 **Key Learnings from Chapter 3:**
 - How to assign roles to Claude using role prompting
