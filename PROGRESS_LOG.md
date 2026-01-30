@@ -7,6 +7,28 @@
 - **Pip Version**: 25.3 (updated from 23.1.2)
 - **Platform**: Windows
 - **Working Directory**: `C:\Users\pawn0\_dev\prompt-eng-interactive-tutorial`
+- **Notebook Environment**: VS Code with Jupyter extension (instead of standalone Jupyter Notebook)
+
+#### VS Code vs. Standalone Jupyter Notebook
+
+**Using**: VS Code with Jupyter extension
+
+**Reason**: Accessibility - requires word wrapping with enlarged text, which VS Code handles better than browser-based Jupyter.
+
+**Key Differences & Notes**:
+- ✅ **Full compatibility**: All tutorial functionality works identically (.ipynb files, `%store` magic, exercises, grading functions)
+- ✅ **Better accessibility**: Adjustable font sizes (`Ctrl +/-`), word wrap (`Alt + Z`), high contrast themes
+- ✅ **IDE features**: IntelliSense, integrated git, better code navigation, debugging
+- ✅ **Modern standard**: VS Code + Jupyter extension is now more commonly used than standalone Jupyter in professional development settings
+- ⚠️ **Tutorial instructions reference browser**: Tutorial docs mention "python -m notebook" for starting Jupyter, but this is unnecessary with VS Code - just open .ipynb files directly
+- 💡 **Starting notebooks**: Open .ipynb files directly in VS Code instead of running `python -m notebook`
+
+**How to Use**:
+1. Open VS Code
+2. Navigate to `Anthropic 1P/` folder
+3. Open any `.ipynb` file (e.g., `07_Using_Examples.ipynb`)
+4. Run cells with `Shift + Enter` (same as browser Jupyter)
+5. VS Code automatically uses the Python environment with installed packages
 
 ### Installation Steps Taken
 
@@ -92,7 +114,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 - [x] Chapter 4: Separating Data from Instructions ✅ Completed (2026-01-28)
 - [x] Chapter 5: Formatting Output & Speaking for Claude ✅ Completed (2026-01-29)
 - [x] Chapter 6: Precognition (Thinking Step by Step) ✅ Completed (2026-01-29)
-- [ ] Chapter 7: Using Examples
+- [x] Chapter 7: Using Examples ✅ Completed (2026-01-29)
 
 **Advanced (Chapters 8-9):**
 - [ ] Chapter 8: Avoiding Hallucinations
