@@ -446,3 +446,39 @@ The model consumes full context before generating anything.
 
 **Meta-Learning Note**: This discussion showed transition from applying surface-level techniques to understanding underlying LLM mechanics - critical for advanced prompt engineering.
 
+---
+
+### Chapter 8: Avoiding Hallucinations - Core Concepts (2026-01-29)
+
+**Status**: Completed lesson portion (exercises pending)
+
+#### Core Anti-Hallucination Strategies
+
+**Key Insight**: Hallucinations often happen when Claude feels obligated to answer even without sufficient information.
+
+**Two Main Approaches Identified**:
+
+1. **Give Claude a Way Out** (Ch 2: Clear Instructions)
+   - Explicitly permit uncertainty: "If you don't know, say 'I don't know'"
+   - Set clear boundaries: "Only use information from the provided text"
+   - **Effect**: Removes pressure to fabricate information when evidence is lacking
+
+2. **Chain of Thought with Citation** (Ch 6: Precognition)
+   - Require step-by-step reasoning: "Think step by step and cite relevant passages"
+   - Force grounding in source material: Claude must reference actual context
+   - **Effect**: Makes hallucinations harder because Claude must point to evidence
+
+#### Synthesis Across Chapters
+
+Anti-hallucination techniques combine multiple learned concepts:
+- **Ch 2**: Clear, specific instructions about constraints (what NOT to do)
+- **Ch 4**: Separating source data from instructions (XML tags for clean boundaries)
+- **Ch 6**: Chain of thought for grounded, evidence-based reasoning
+- **Ch 7**: Few-shot examples demonstrating "I don't know" patterns
+
+**Key Principle**: No single technique is a magic bullet. Combining techniques creates reliable, production-ready systems that prioritize accuracy over completeness.
+
+**Practical Application**: Critical for customer-facing applications, document analysis, factual summarization, and any scenario where accuracy is non-negotiable.
+
+**Next**: Complete Chapter 8 exercises to practice implementing anti-hallucination techniques.
+
