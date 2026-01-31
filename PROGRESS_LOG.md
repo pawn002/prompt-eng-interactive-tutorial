@@ -117,7 +117,7 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 - [x] Chapter 7: Using Examples ✅ Completed (2026-01-29)
 
 **Advanced (Chapters 8-9):**
-- [ ] Chapter 8: Avoiding Hallucinations
+- [x] Chapter 8: Avoiding Hallucinations ✅ Completed (2026-01-31)
 - [ ] Chapter 9: Building Complex Prompts (Industry Use Cases)
 
 **Appendix:**
@@ -238,7 +238,7 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - Completed sanity check on learning progress
 - Captured key insights about XML tags and prefilling
 
-**Current Session (2026-01-29):**
+**Session 4 (2026-01-29):**
 - ✅ Completed Chapter 5: Formatting Output & Speaking for Claude
 - Finished all exercises in `05_Formatting_Output_and_Speaking_for_Claude.ipynb`
 - **Second intermediate chapter complete!**
@@ -246,8 +246,20 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - Finished all exercises in `06_Precognition_Thinking_Step_by_Step.ipynb`
 - **Third intermediate chapter complete!**
 - Found immediate real-world applications for step-by-step reasoning technique
-- Started Chapter 7: Using Examples
-- Working through notebook: `07_Using_Examples.ipynb`
+- ✅ Completed Chapter 7: Using Examples
+- Finished all exercises in `07_Using_Examples.ipynb`
+- Started Chapter 8: Avoiding Hallucinations
+- Completed Chapter 8 lesson portion
+
+**Current Session (2026-01-31):**
+- ✅ Completed Chapter 8: Avoiding Hallucinations
+- Finished all exercises in `08_Avoiding_Hallucinations.ipynb`
+- **First advanced chapter complete!**
+- Applied "give Claude a way out" and explicit CoT techniques successfully
+- Recognized tutorial progression: foundational techniques (Ch 8) → architectural patterns (Appendix)
+- Identified broader anti-hallucination ecosystem beyond tutorial scope
+
+**Next**: Begin Chapter 9 - Building Complex Prompts (Industry Use Cases) - final chapter before appendix
 
 **Key Learnings from Chapter 5:**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
@@ -480,5 +492,42 @@ Anti-hallucination techniques combine multiple learned concepts:
 
 **Practical Application**: Critical for customer-facing applications, document analysis, factual summarization, and any scenario where accuracy is non-negotiable.
 
-**Next**: Complete Chapter 8 exercises to practice implementing anti-hallucination techniques.
+#### Chapter 8 Exercises Completed (2026-01-31)
+
+**Status**: ✅ All exercises completed
+
+**Techniques Applied Successfully:**
+1. **"Give Claude a Way Out"**: Explicit instruction "If you don't know the answer, say you don't know"
+   - Removes pressure to fabricate information
+   - Works as taught in lesson
+
+2. **Explicit Chain of Thought**: "Get started by thinking step by step"
+   - Forces grounded, evidence-based reasoning
+   - Successfully prevented hallucinations in exercises
+
+**Key Insight - Beyond the Tutorial:**
+
+Recognized that Chapter 8 covers **foundational prompt-level techniques**, but production anti-hallucination requires broader strategies:
+
+**Covered in Ch 8:**
+- Permission to express uncertainty
+- CoT with citation/grounding
+- Combining with data separation (Ch 4) and few-shot (Ch 7)
+
+**Likely in Appendix:**
+- **RAG (Retrieval-Augmented Generation)** - Industry standard for factual accuracy
+- **Chaining Prompts** - Breaking tasks into verifiable steps
+- **Tool Use** - Grounding in actual data retrieval
+- **Search & Retrieval** - Systematic information sourcing
+
+**Production System Techniques (Beyond Tutorial Scope):**
+- Verification passes (generate → verify → revise)
+- Confidence scoring and filtering
+- Multi-model consensus
+- Human-in-the-loop for high-stakes decisions
+- Temperature tuning for deterministic outputs
+
+**Understanding**: Chapter 8 provides **building blocks** that combine with architectural patterns (RAG, chaining) in the appendix to create production-grade accuracy systems. Tutorial is progressive - each chapter adds layers.
+
+**Next**: Chapter 9 - Building Complex Prompts (Industry Use Cases)
 
