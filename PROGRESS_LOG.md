@@ -121,9 +121,9 @@ The `.env` file is protected by `.gitignore` and won't be committed.
 - [x] Chapter 9: Building Complex Prompts (Industry Use Cases) ✅ Completed (2026-02-02)
 
 **Appendix:**
-- [ ] Chaining Prompts
-- [ ] Tool Use
-- [ ] Search & Retrieval
+- [x] 10.1 - Chaining Prompts ✅ Completed (2026-02-02)
+- [ ] 10.2 - Tool Use
+- [ ] 10.3 - Search & Retrieval
 
 ### Resources
 - **Tutorial Location**: `C:\Users\pawn0\_dev\prompt-eng-interactive-tutorial\Anthropic 1P\`
@@ -300,7 +300,19 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
    - Foundational works like "Chain of Thought Prompting Elicits Reasoning in Large Language Models"
    - Organized by: Overviews, Approaches, Applications
 
-**Next**: Appendix sections (Chaining Prompts, Tool Use, Search & Retrieval)
+- ✅ Completed Appendix 10.1: Chaining Prompts
+- Finished all exercises in `10.1_Appendix_Chaining Prompts.ipynb`
+- Learned architectural patterns for breaking complex tasks into sequential prompts
+
+**Key Insight - Cost-Efficient Chaining:**
+- Chaining has significant promise for complex workflows
+- **Critical principle**: Not every step in a chain should be an LLM call
+- Deterministic operations (sorting, filtering, basic data transformations) should use traditional code
+- **Cost optimization**: Only invoke LLM when you need reasoning, understanding, or generation
+- **Example**: In a chain, use LLM to extract/classify → deterministic code to sort/filter → LLM to synthesize results
+- This hybrid approach (LLM + deterministic code) is standard in production systems
+
+**Next**: Continue with Appendix 10.2 (Tool Use) and 10.3 (Search & Retrieval)
 
 ---
 
