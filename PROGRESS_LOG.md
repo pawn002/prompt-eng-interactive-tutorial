@@ -261,6 +261,89 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 
 **Next**: Begin Chapter 9 - Building Complex Prompts (Industry Use Cases) - final chapter before appendix
 
+---
+
+## Test Case Generation Strategy (2026-02-01)
+
+### Context
+Discussion after completing Exercise 9.1 about systematic testing of prompt element ordering and test case generation strategies.
+
+### Key Question
+In what order should test cases be generated for prompt engineering evaluation sets?
+
+### Initial Hypothesis (Incorrect)
+Prioritize by cost/speed:
+1. Synthetic generation (cheapest, fastest)
+2. Domain expertise refinement
+3. Failure logs
+4. Real user data (assumed "expensive")
+
+### Actual Industry Practice
+
+**Correct prioritization:**
+
+1. **Start with real user data + domain expertise**
+   - Real data grounds you in actual use cases
+   - Even small samples (10-50 examples) are invaluable
+   - Synthetic-first risks optimizing for wrong distribution
+   - User data isn't "expensive" - it's often why you're building the prompt
+
+2. **Supplement with synthetic generation**
+   - Guided by patterns from real data
+   - Fill coverage gaps and edge cases
+   - Scale up eval set size
+   - Test specific failure modes
+
+3. **Failure logs** (post-deployment)
+   - Only available after going live
+   - Extremely high value - actual failures in production
+   - Continuous feedback loop
+
+4. **Ongoing real data sampling**
+   - Periodic refresh to prevent eval set drift
+   - Ensures alignment with current usage patterns
+
+### Key Insights
+
+**Why not synthetic-first?**
+- Synthetic generation without real data context often misses how users actually behave
+- Risk: Generate 1000 test cases for scenarios users never encounter
+- Real data reveals language patterns, ambiguity, typos, unexpected inputs
+
+**The "expensive" misconception:**
+User data barriers are usually:
+- Privacy/compliance (GDPR, HIPAA)
+- Access/permissions (organizational silos)
+- Availability (pre-launch, no users yet)
+
+NOT cost. When available, real data is cheaper and better than synthetic.
+
+**When synthetic-first makes sense:**
+- Pre-launch with no users yet (but lean heavily on domain expertise)
+- Privacy constraints prevent real data access
+- Scaling evaluation after establishing real-data baseline
+
+### Systematic Testing Approach
+
+**Permutation testing:**
+- Testing all orderings of prompt elements quickly becomes impractical (n! permutations)
+- 5 elements = 120 permutations
+- 6 elements = 720 permutations
+- 7 elements = 5,040 permutations
+
+**Industry approach:**
+- Strategic testing of 3-5 carefully chosen variants
+- Focus on failure cases from eval set
+- Use automated evaluation when possible
+- Tools: DSPy, LangSmith, custom eval harnesses
+
+### Related Tutorial Content
+- Chapter 9: Complex Prompts from Scratch
+- Appendix: Empirical Performance Evaluations (covers systematic testing with eval sets)
+
+### Takeaway
+Synthetic generation is a **multiplier** on real data, not a replacement. Start small and real, then scale with synthetic.
+
 **Key Learnings from Chapter 5:**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
 - **Use cases for prefilling**:

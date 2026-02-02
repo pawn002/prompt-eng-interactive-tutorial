@@ -104,6 +104,7 @@ Each notebook follows this pattern:
 
 - **hints.py**: Contains hints for all exercises (both `Anthropic 1P/hints.py` and `AmazonBedrock/utils/hints.py`)
 - **PROGRESS_LOG.md**: User-maintained progress tracking (not part of original repo)
+  - **IMPORTANT**: When user asks to "make a note of..." something, append it to PROGRESS_LOG.md, NOT a separate file
 - **requirements.txt**: Bedrock dependencies only (in `AmazonBedrock/` directory)
 - **.env**: API credentials (in `Anthropic 1P/.env` - not committed, protected by .gitignore)
 - **.gitignore**: Protects `.env`, `secrets.py`, `.claude/`, and `.ipynb_checkpoints/` from being committed
