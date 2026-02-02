@@ -344,6 +344,101 @@ NOT cost. When available, real data is cheaper and better than synthetic.
 ### Takeaway
 Synthetic generation is a **multiplier** on real data, not a replacement. Start small and real, then scale with synthetic.
 
+---
+
+## Permutation Testing Cost Analysis (2026-02-01)
+
+### Context
+Follow-up analysis on exhaustive permutation testing of prompt element orderings - calculating the actual cost and practicality.
+
+### Permutation Growth (Factorial Explosion)
+
+```
+Elements | Permutations | Formula
+---------|--------------|--------
+    1    |           1  | 1!
+    2    |           2  | 2!
+    3    |           6  | 3!
+    4    |          24  | 4!
+    5    |         120  | 5!
+    6    |         720  | 6!
+    7    |       5,040  | 7!
+    8    |      40,320  | 8!
+    9    |     362,880  | 9!
+   10    |   3,628,800  | 10!
+```
+
+### Example Permutations
+
+**3 Elements [Role, Data, Instructions]:**
+1. Role, Data, Instructions
+2. Role, Instructions, Data
+3. Data, Role, Instructions
+4. Data, Instructions, Role
+5. Instructions, Role, Data
+6. Instructions, Data, Role
+
+**4 Elements** = 24 permutations (all combinations of Role, Examples, Data, Instructions)
+
+### Cost Analysis
+
+**Setup:**
+- Model: Claude 3 Haiku (current tutorial configuration)
+- Pricing (2025): $0.25/M input tokens, $1.25/M output tokens
+- Assumptions: 500 tokens input, 200 tokens output per test
+- Cost per API call: ~$0.00038
+
+**Cost by Element Count:**
+
+```
+Elements | Permutations | Total Cost
+---------|--------------|------------
+    3    |           6  |   $0.0023
+    4    |          24  |   $0.0090
+    5    |         120  |   $0.0450
+    6    |         720  |   $0.2700
+    7    |       5,040  |   $1.8900
+    8    |      40,320  |  $15.1200
+    9    |     362,880  | $136.0800
+   10    |   3,628,800  | $1,360.80
+```
+
+### Practical Thresholds
+
+**Viable (3-5 elements):** $0.002 - $0.045
+- Low cost, manageable API volume
+- Useful for testing key ordering effects
+- Can run exhaustive tests
+
+**Marginal (6-7 elements):** $0.27 - $1.89
+- Cost becomes noticeable
+- Many permutations semantically meaningless
+- Better to use strategic sampling
+
+**Impractical (8+ elements):** $15+
+- Prohibitively expensive
+- Extreme diminishing returns
+- Industry uses strategic testing instead
+
+### Real-World Application
+
+**Typical Chapter 9 complex prompt elements:**
+1. Role assignment
+2. Task instructions
+3. Data/context
+4. Output format
+5. Examples (few-shot)
+6. Chain of thought instruction
+7. Constraints/guardrails
+
+**7 elements = 5,040 permutations = $1.89**
+
+**Industry practice:** Test 5-10 strategic orderings (~$0.004) based on hypotheses rather than exhaustive search.
+
+### Key Takeaway
+
+Exhaustive permutation testing is only practical for 3-5 core elements. Beyond that, strategic sampling based on understanding of prompt mechanics is more cost-effective and yields better insights.
+
 **Key Learnings from Chapter 5:**
 - **Prefilling mechanism**: Putting text in the Assistant turn literally tells Claude "you've already said this, continue from here"
 - **Use cases for prefilling**:
