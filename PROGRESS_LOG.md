@@ -312,7 +312,14 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 - **Example**: In a chain, use LLM to extract/classify → deterministic code to sort/filter → LLM to synthesize results
 - This hybrid approach (LLM + deterministic code) is standard in production systems
 
-**Next**: Continue with Appendix 10.2 (Tool Use) and 10.3 (Search & Retrieval)
+**Sanity Check Created:**
+- Created `SANITY_CHECK_POST_APPENDIX_10.1.md` for later review
+- Exercise tests synthesis of Chapters 1-9 + Appendix 10.1 chaining concepts
+- Focus: Design cost-efficient multi-step solution (hybrid LLM + deterministic code)
+- Scenario: Customer support ticket analysis & routing system
+- Includes reflection questions and success criteria for self-assessment
+
+**Next**: Complete sanity check exercise, then continue with Appendix 10.2 (Tool Use) and 10.3 (Search & Retrieval)
 
 ---
 
