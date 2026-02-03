@@ -232,9 +232,113 @@ You've successfully demonstrated mastery if your solution:
 
 ## Notes
 
-Use this space for any additional thoughts, questions, or insights as you work through this exercise.
+### Session 2026-02-02 - In Progress
 
-[Your notes here]
+**Architecture Decision Made:**
+- Using hybrid approach: 2 LLM calls + deterministic code
+- Batching extraction + classification into single LLM call for cost efficiency
+- Plan to validate empirically and pivot if needed
+
+**Step 1: Extract & Classify (LLM Call) - COMPLETED**
+
+**Method:** ✅ LLM Call
+
+**Justification:**
+- Requires natural language understanding to extract key entities
+- Requires reasoning to classify tickets into categories
+- Must interpret urgency signals and severity from unstructured text
+- Deterministic code cannot handle the variability of customer language
+
+**Implementation:**
+
+```
+USER:
+You are a senior customer service representative with expertise in ticket classification and triage.
+
+Your task is to analyze a customer support ticket and extract key information. Think step by step through the ticket content.
+
+<valid_categories>
+- billing
+- technical
+- account
+- shipping
+- general
+</valid_categories>
+
+<valid_severity_levels>
+- critical
+- high
+- medium
+- low
+</valid_severity_levels>
+
+<valid_urgency_indicators>
+- immediate (customer states explicit time constraint)
+- urgent (financial impact or business blocking)
+- normal (standard request)
+</valid_urgency_indicators>
+
+<user_ticket>
+{TICKET_DATA_GOES_HERE}
+</user_ticket>
+
+Extract the following from the ticket:
+1. Primary category (choose one from valid_categories)
+2. Severity level (choose one from valid_severity_levels)
+3. Urgency indicator (choose one from valid_urgency_indicators)
+4. Key entities (customer name, error codes, transaction amounts, etc.)
+5. Core issue (one sentence summary)
+
+If you cannot accurately classify the ticket or key information is missing, set "needs_manual_review" to true and explain why in "review_reason".
+
+<examples>
+GOOD EXAMPLE:
+Ticket: "I can't log in, getting error 403. Need to approve $50k transaction by 5pm today!"
+Output: {"category": "technical", "severity": "high", "urgency": "immediate", "entities": {"error_code": "403", "transaction_amount": 50000, "deadline": "5pm today"}, "core_issue": "Login blocked by 403 error preventing time-sensitive transaction", "needs_manual_review": false}
+
+BAD EXAMPLE:
+Ticket: "I can't log in, getting error 403. Need to approve $50k transaction by 5pm today!"
+Output: {"category": "urgent_billing_technical", "severity": "super urgent", ...}
+[Why bad: Invalid category (not from list), invalid severity (not from list)]
+</examples>
+
+<json_schema>
+{
+  "category": "string (from valid_categories)",
+  "severity": "string (from valid_severity_levels)",
+  "urgency": "string (from valid_urgency_indicators)",
+  "entities": "object (key-value pairs of extracted entities)",
+  "core_issue": "string (one sentence)",
+  "needs_manual_review": "boolean",
+  "review_reason": "string (only if needs_manual_review is true)"
+}
+</json_schema>
+
+Return only valid JSON matching this schema.
+
+ASSISTANT: {
+```
+
+**Techniques Applied:**
+- **Ch 3 (Role Prompting)**: "senior customer service representative with expertise in ticket classification"
+- **Ch 4 (Data Separation)**: XML tags `<user_ticket>`, `<valid_categories>`, etc. to prevent prompt injection
+- **Ch 2 (Clear Instructions)**: Explicit numbered list of what to extract
+- **Ch 6 (Chain of Thought)**: "Think step by step through the ticket content"
+- **Ch 8 (Avoiding Hallucinations)**: "If you cannot accurately classify... set needs_manual_review to true" - giving Claude a way out
+- **Ch 7 (Few-Shot)**: Good and bad examples demonstrating correct output format
+- **Ch 5 (Output Formatting + Prefilling)**: JSON schema specification + prefilling with `{` to force JSON start
+
+**Input:** Raw ticket data (JSON object)
+**Output:** Structured extraction (JSON with category, severity, urgency, entities, core_issue)
+
+**Key Insight - Positional Context & Implicit Referencing:**
+- LLMs process entire prompt in context-loading phase before generation
+- Proximity and structure create implicit references - no need for verbose connectors
+- "Extract the following from the ticket:" works because ticket data was just shown
+- Efficient prompts use structure over verbosity
+- Explicit references only needed when: multiple data sources, complex multi-step tasks, ambiguous ordering
+
+**Status:** Step 1 complete. Ready to continue with Steps 2-4 when resuming.
 
 ---
 
