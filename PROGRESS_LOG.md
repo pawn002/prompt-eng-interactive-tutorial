@@ -338,6 +338,25 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 
 **Next**: Resume sanity check - complete Steps 2-4 (priority scoring, routing rules, response generation) and cost analysis
 
+**Session (2026-02-03):**
+- 🔄 **Resumed Sanity Check: Post-Appendix 10.1**
+- **Revisited Step 1** — modified output schema to better serve downstream steps
+  - Added `has_financial_urgency` and `has_time_constraint` boolean flags to Step 1's JSON schema
+  - Updated extraction instructions, good example, and schema in the prompt accordingly
+  - Reasoning: Step 1's `entities` field is open-ended (LLM decides keys), making deterministic code that relies on it fragile
+  - The two flags push the reasoning (interpreting natural language for urgency/time signals) into Step 1 where it already lives, and give Step 2 a reliable schema to work with
+- **Walked through Step 2: Priority Scoring** — confirmed fully deterministic with updated inputs
+  - Inputs from two sources: original ticket (`customer_tier`, `satisfaction_score`, `lifetime_value`) + Step 1 output (`has_financial_urgency`, `has_time_constraint`)
+  - Sample ticket scores: 30 (premium) + 40 (financial) + 25 (time) + 15 (satisfaction) = 110, then ×1.5 (lifetime value) = **165**
+  - Noted: multiplier applies last (after all additive points) — ordering assumption worth making explicit in code
+- **Trap Identified and Noted** ⭐ (see "Trap: Treating Earlier Steps as Locked" note below)
+  - Initially tried to write Step 2 deterministic code against the open-ended `entities` field
+  - Recognized the fragility, went back and revised Step 1's schema instead of working around it
+  - Documented as a meta-learning note in PROGRESS_LOG for future vigilance
+- **Status**: Step 1 revised, Step 2 logic confirmed. Pausing to internalize before continuing.
+
+**Next**: Resume sanity check - complete Steps 3-4 (routing rules, response generation), architecture diagram, cost analysis, and reflection questions
+
 ---
 
 ## Test Case Generation Strategy (2026-02-01)
@@ -785,4 +804,26 @@ Recognized that Chapter 8 covers **foundational prompt-level techniques**, but p
 **Understanding**: Chapter 8 provides **building blocks** that combine with architectural patterns (RAG, chaining) in the appendix to create production-grade accuracy systems. Tutorial is progressive - each chapter adds layers.
 
 **Next**: Chapter 9 - Building Complex Prompts (Industry Use Cases)
+
+---
+
+### Trap: Treating Earlier Steps as Locked in Multi-Step Designs (2026-02-03)
+
+**Context:** During sanity check Step 2 (priority scoring), initially designed deterministic code to pull from Step 1's open-ended `entities` field. Realized the code would be fragile because `entities` has no fixed schema — the LLM decides the keys. The right fix was to go back and modify Step 1's output schema to surface explicit flags (`has_financial_urgency`, `has_time_constraint`) that Step 2 actually needs.
+
+**The Trap:**
+- Once a step is "completed," there's a cognitive pull to treat it as fixed and design subsequent steps around its existing output
+- This leads to downstream steps doing awkward workarounds (fragile keyword matching, extra LLM calls) instead of questioning whether the earlier step's output should change
+
+**The Principle:**
+- In multi-step system design, earlier steps' schemas should be shaped by what downstream steps need — not the other way around
+- "Going back to redo Step 1" is not a failure; it's the correct move when a downstream requirement reveals a gap
+- Each step's output is a **contract** between steps — and contracts can and should be revised when you discover they don't serve the system well
+
+**Where This Shows Up:**
+- Technical interviews: system design questions where you're expected to revisit earlier decisions as you work through the problem
+- Real engineering: API design, database schemas, pipeline architecture — early decisions ripple downstream
+- Prompt chaining: Step N's output schema should be designed with Steps N+1, N+2 in mind, not in isolation
+
+**Vigilance Cue:** When designing a downstream step feels awkward or requires fragile workarounds, stop and ask: "Should I change the upstream step's output instead?"
 

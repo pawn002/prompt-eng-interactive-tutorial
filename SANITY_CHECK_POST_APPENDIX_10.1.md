@@ -288,13 +288,15 @@ Extract the following from the ticket:
 3. Urgency indicator (choose one from valid_urgency_indicators)
 4. Key entities (customer name, error codes, transaction amounts, etc.)
 5. Core issue (one sentence summary)
+6. Whether the ticket contains financial urgency (e.g. pending transactions, payment issues, revenue impact)
+7. Whether the ticket contains a time constraint (e.g. deadlines, end of day, time-sensitive requests)
 
 If you cannot accurately classify the ticket or key information is missing, set "needs_manual_review" to true and explain why in "review_reason".
 
 <examples>
 GOOD EXAMPLE:
 Ticket: "I can't log in, getting error 403. Need to approve $50k transaction by 5pm today!"
-Output: {"category": "technical", "severity": "high", "urgency": "immediate", "entities": {"error_code": "403", "transaction_amount": 50000, "deadline": "5pm today"}, "core_issue": "Login blocked by 403 error preventing time-sensitive transaction", "needs_manual_review": false}
+Output: {"category": "technical", "severity": "high", "urgency": "immediate", "entities": {"error_code": "403", "transaction_amount": 50000, "deadline": "5pm today"}, "core_issue": "Login blocked by 403 error preventing time-sensitive transaction", "has_financial_urgency": true, "has_time_constraint": true, "needs_manual_review": false}
 
 BAD EXAMPLE:
 Ticket: "I can't log in, getting error 403. Need to approve $50k transaction by 5pm today!"
@@ -309,6 +311,8 @@ Output: {"category": "urgent_billing_technical", "severity": "super urgent", ...
   "urgency": "string (from valid_urgency_indicators)",
   "entities": "object (key-value pairs of extracted entities)",
   "core_issue": "string (one sentence)",
+  "has_financial_urgency": "boolean (true if ticket involves financial urgency)",
+  "has_time_constraint": "boolean (true if ticket contains a time constraint)",
   "needs_manual_review": "boolean",
   "review_reason": "string (only if needs_manual_review is true)"
 }
