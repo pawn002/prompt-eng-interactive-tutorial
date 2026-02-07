@@ -342,8 +342,150 @@ ASSISTANT: {
 - Efficient prompts use structure over verbosity
 - Explicit references only needed when: multiple data sources, complex multi-step tasks, ambiguous ordering
 
-**Status:** Step 1 complete. Ready to continue with Steps 2-4 when resuming.
+**Status:** Step 1 complete.
 
 ---
+
+### Session 2026-02-03 - Step 2 Revisited
+
+**Step 1 Schema Revision:**
+- Added `has_financial_urgency` (boolean) and `has_time_constraint` (boolean) to Step 1's output schema
+- Reasoning: Step 1's `entities` field is open-ended (LLM decides keys), making deterministic code in Step 2 fragile if it depends on entity keys
+- The two flags push urgency/time reasoning into Step 1 (where the LLM is already interpreting the ticket) and give Step 2 a reliable contract to work with
+- Updated extraction instructions, good example, and schema in the prompt accordingly
+
+**Step 2: Priority Scoring (Deterministic Code) - COMPLETED**
+
+**Method:** ✅ Deterministic Code
+
+**Justification:**
+- Priority scoring formula is fully defined in business rules — no interpretation needed
+- Pure arithmetic with threshold checks
+- LLM adds cost, latency, and non-determinism for a task that is 100% rule-based
+
+**Implementation (Pseudocode):**
+```
+score = 0
+# Tier points
+if customer_tier == "premium": score += 30
+elif customer_tier == "standard": score += 20
+elif customer_tier == "basic": score += 10
+
+# From Step 1 output (boolean flags)
+if has_financial_urgency: score += 40
+if has_time_constraint: score += 25
+
+# From customer history
+if satisfaction_score >= 4.5: score += 15
+
+# Multiplier applies last (after all additive points)
+if lifetime_value > 100000: score *= 1.5
+
+Why not LLM: Formula is fixed, deterministic, and unambiguous. Using an LLM would add cost and introduce risk of arithmetic errors.
+```
+
+**Input:** Original ticket data (`customer_tier`, `satisfaction_score`, `lifetime_value`) + Step 1 output (`has_financial_urgency`, `has_time_constraint`)
+**Output:** `{ "priority_score": <number> }`
+
+**Sample Walkthrough:** 30 (premium) + 40 (financial) + 25 (time) + 15 (satisfaction ≥ 4.5) = 110, then ×1.5 (lifetime value > 100k) = **165**
+
+**Meta-Learning:** See "Trap: Treating Earlier Steps as Locked" in PROGRESS_LOG.md — initially tried to make Step 2 work with Step 1's open-ended `entities` field instead of revising Step 1's schema.
+
+---
+
+### Session 2026-02-06 - Steps 3 & 4
+
+**Step 3: Routing Rules (Deterministic Code) - COMPLETED**
+
+**Method:** ✅ Deterministic Code
+
+**Justification:**
+- Routing is pure if/else logic with no ambiguity
+- Inputs are structured data (priority score from Step 2, category/severity from Step 1)
+- No interpretation or reasoning required
+
+**Implementation (Pseudocode):**
+```
+# Determine routing destination
+if priority_score >= 100: destination = "Tier-1 Immediate Response"
+elif priority_score >= 60: destination = "Standard Support"
+else: destination = "General Queue"
+
+# Determine cc targets
+cc = []
+if category == "billing": cc.append("Finance Team")
+if category == "technical" and severity == "critical": cc.append("Engineering Team")
+
+Why not LLM: Exact threshold comparisons and string matching. Zero ambiguity, zero need for reasoning.
+```
+
+**Input:** Step 2 output (`priority_score`) + Step 1 output (`category`, `severity`)
+**Output:** `{ "routing_destination": "<string>", "cc": [<list of strings>] }`
+
+**Sample Walkthrough:** Priority 165 → "Tier-1 Immediate Response". Category "technical" + severity "critical" → cc ["Engineering Team"].
+
+---
+
+**Step 4: Response Generation (LLM Call) - DESIGN COMPLETED**
+
+**Method:** ✅ LLM Call
+
+**Justification:**
+- Generating empathetic, customer-appropriate responses requires natural language understanding and generation
+- Must mirror the customer's specific language and emotional state — not templatable
+- Deterministic templates cannot adapt to the infinite variety of customer situations
+
+**Design Thinking — Human-Centered Approach:**
+
+The key insight for this step was resisting the instinct to approach it from the data/technical side. Customer responses are about satisfying people, not transmitting data.
+
+**Three core customer needs:**
+1. **Feel heard** — response must reflect their specific situation, not generic acknowledgment
+2. **Validation** — their frustration/urgency is legitimate and understood
+3. **Feel in control** — they know what happens next and that progress is being made
+
+Satisfying these three needs builds **trust**, which manifests as continued customer investment in the organization.
+
+**Data's role is supportive** — it provides factual information (routing destination, what to expect) that empowers the customer to feel in control. But empathy comes first.
+
+**Three input sources (and why each matters):**
+1. **Original ticket body** — essential for empathy/mirroring. Step 1's structured extraction tells you *what* the issue is, but the original text tells you *how the customer feels about it*. "I've been trying for 2 hours" and "my team is waiting on me" are the language needed to make someone feel heard. A JSON field `"urgency": "immediate"` cannot do that.
+2. **Step 1 output** — for accurate issue characterization (category, severity, core_issue)
+3. **Step 3 output** — for routing facts and customer expectations (where their ticket is going, who's involved)
+
+**Techniques to Apply:**
+- **Ch 3 (Role Prompting)**: Senior CSR with helpful, compassionate tone showing obvious investment in making the customer whole
+- **Ch 4 (Data Separation)**: XML tags separating the three data sources (`<original_ticket>`, `<classification>`, `<routing>`)
+- **Ch 2 (Clear Instructions)**: Structural direction — acknowledge → validate → inform → empower
+- **Ch 8 (Hallucination Prevention)**: Context-adapted escape hatch (see below)
+
+**Critical: Anti-Hallucination for Customer-Facing Output**
+
+Standard Ch 8 technique: "If you don't know, say you don't know."
+Problem: Telling a customer "I don't know" fails their need to feel in control. Leaves them stranded.
+
+**Modified approach**: "If you are uncertain about resolution timelines, available remedies, or any commitment beyond what is explicitly stated in the routing data, do not guess. Instead, indicate that a specialist from [routing_destination] will follow up with specific details."
+
+This constrains the LLM to only state what it can source from the XML-tagged data, and routes everything uncertain to humans. It preserves customer momentum toward resolution.
+
+**Real-world precedent for why this matters:** Airline chatbot incident where bot promised invalid compensation — hallucinated a resolution the company couldn't honor. Exact failure mode this escape hatch prevents.
+
+| Context | Ch 8 Escape Hatch | Why |
+|---|---|---|
+| Analytical/internal | "Say I don't know" | Accuracy > completeness |
+| Customer-facing | "Escalate to human" | Preserves customer's sense of control |
+
+**Input:** Original ticket body + Step 1 output + Step 3 output
+**Output:** Draft customer response template for support agent review
+
+**Status:** Design thinking complete. Actual prompt draft pending — want to mull before writing.
+
+---
+
+**Remaining Items:**
+- [ ] Draft actual Step 4 prompt
+- [ ] Architecture diagram
+- [ ] Cost analysis (hybrid vs all-LLM)
+- [ ] Reflection questions (4 questions)
 
 **Ready to review?** When you've completed this exercise, we can discuss your solution and identify any gaps or areas for improvement.

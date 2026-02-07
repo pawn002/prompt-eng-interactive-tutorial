@@ -357,6 +357,29 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 
 **Next**: Resume sanity check - complete Steps 3-4 (routing rules, response generation), architecture diagram, cost analysis, and reflection questions
 
+**Session (2026-02-06):**
+- 🔄 **Resumed Sanity Check: Post-Appendix 10.1**
+- **Step 3: Routing Rules (Deterministic)** — completed
+  - Pure if/else on priority thresholds + category/severity matching
+  - Output: `{ routing_destination, cc }` — minimal contract for Step 4
+- **Step 4: Response Generation (LLM) — design thinking completed**
+  - **Key Insight: Human-centered response design** ⭐
+    - Fought instinct to approach from data/technical side
+    - Customer responses satisfy three needs: (1) feel heard, (2) validation, (3) feel in control
+    - These build trust → continued customer investment
+    - Data plays a supportive role (factual routing info), not the leading role
+  - **Original ticket body is essential input** — Step 1's structured extraction tells you *what* the issue is, but the original text tells you *how the customer feels*. Empathy requires the customer's actual language, not a JSON summary.
+  - Three input sources: original ticket (empathy), Step 1 output (classification), Step 3 output (routing facts)
+  - **Context-adapted hallucination prevention** ⭐
+    - Standard Ch 8 "say I don't know" fails in customer-facing contexts — undermines customer's sense of control
+    - Modified: "Escalate to human specialist" preserves momentum toward resolution
+    - Real-world precedent: airline chatbot promising invalid compensation
+    - Principle: escape hatch must match the context (internal → admit uncertainty; customer-facing → escalate with continuity)
+  - Techniques: Role prompting (Ch 3), XML data separation (Ch 4), clear structural direction (Ch 2), modified anti-hallucination (Ch 8)
+- **Status**: All 4 steps designed. Still need: draft Step 4 prompt, architecture diagram, cost analysis, reflection questions.
+
+**Next**: Draft Step 4 prompt, then complete architecture diagram, cost analysis, and reflection questions
+
 ---
 
 ## Test Case Generation Strategy (2026-02-01)
