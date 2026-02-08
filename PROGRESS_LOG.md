@@ -382,9 +382,19 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
   - Removed "will be reviewed by human agent" framing — review strategy is the system's concern
   - **Tiered review strategy** ⭐: Map review intensity to routing tier (Tier-1 = human review before send, General Queue = send directly + audit for QA). Pivot if QA data shows degradation.
   - Prefill with `<draft_response>` to force output format (Ch 5)
-- **Status**: All 4 steps complete (design + implementation). Remaining: architecture diagram, cost analysis, reflection questions.
+- **Architecture diagram** completed — shows data flow with Step 4 "reach-back" to original ticket
+- **Cost analysis** completed with tiered model pricing
+  - Challenged bell curve assumption — priority scores are right-skewed (discrete jumps, not continuous)
+  - Tiered models: Haiku (General Queue), Sonnet (Standard), Opus (Tier-1)
+  - Hybrid saves ~47% vs all-LLM; Tier-1 tickets drive disproportionate savings despite being 10% of volume
+- **Reflection questions** completed (all 4):
+  - Q1: Determinism as the core heuristic for LLM vs code
+  - Q2: Chaining tradeoffs — debuggability vs error propagation; latency parallel to RTC accessibility concerns ⭐
+  - Q3: Anti-hallucination (Ch 8) as #1 most critical — severity hierarchy (quality improvement vs catastrophic failure prevention)
+  - Q4: Observability first; data privacy decision framework (API vs self-hosted vs PII scrubbing); let compliance own the risk decision
+- **Status**: ✅ **Sanity check COMPLETE.** All success criteria met.
 
-**Next**: Complete architecture diagram, cost analysis, and reflection questions
+**Next**: Begin Appendix 10.2 — Tool Use
 
 ---
 

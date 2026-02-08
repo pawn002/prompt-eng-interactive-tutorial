@@ -135,41 +135,109 @@ Why not LLM: [Explain why code is more appropriate]
 ## Architecture Diagram
 
 ```
-[Draw or describe the flow of data through your system]
-
-Example:
-Input Ticket
-    ↓
-[Step 1: LLM - Extract & Classify]
-    ↓
-[Step 2: Code - Calculate Priority Score]
-    ↓
-[Step 3: Code - Apply Routing Rules]
-    ↓
-[Step 4: LLM - Generate Response Template]
-    ↓
-Output: Routed ticket + template
+Input Ticket (raw JSON)
+    │
+    ├──────────────────────────────────┐
+    │                                  │
+    ▼                                  │
+[Step 1: Extract & Classify]  🤖 LLM  │
+    │                                  │
+    │ → { category, severity,          │
+    │     urgency, entities,           │
+    │     core_issue,                  │
+    │     has_financial_urgency,       │
+    │     has_time_constraint }        │
+    │                                  │
+    ├─────────────────┐                │
+    │                 │                │
+    ▼                 │                │
+[Step 2: Priority     │                │
+ Scoring]  ⚙️ Code    │                │
+    │                 │                │
+    │ → { priority_   │                │
+    │     score: 165 }│                │
+    │                 │                │
+    ▼                 │                │
+[Step 3: Routing      │                │
+ Rules]  ⚙️ Code      │                │
+    │                 │                │
+    │ → { routing_    │                │
+    │     destination, │               │
+    │     cc }         │               │
+    │                  │               │
+    ▼                  ▼               ▼
+[Step 4: Response Generation]  🤖 LLM
+    │
+    │  ← consumes: original ticket
+    │               + Step 1 output
+    │               + Step 3 output
+    │
+    ▼
+Output: <draft_response>
 ```
+
+**Key data flow patterns:**
+- **Step 4 reaches back** to both the original input and Step 1, skipping Step 2
+- **Step 2's score is fully consumed by Step 3** — no downstream value beyond determining the route
+- **Original ticket bypasses the middle pipeline** — empathy requires the customer's raw language, not processed data
+- **Two LLM calls bookend two deterministic steps** — hybrid architecture minimizes API costs
 
 ---
 
 ## Cost Analysis
 
-**Estimate the cost savings of your hybrid approach:**
+### Distribution Assumption
 
-1. **Your approach:**
-   - Number of LLM calls per ticket: ___
-   - Estimated tokens per call: ___
-   - Estimated cost per ticket: $___
+The original template assumed a bell curve for priority scores. **This was challenged** — the priority scoring formula uses discrete additive jumps (30, 40, 25, etc.) with a 1.5x multiplier, producing clustered scores, not a smooth normal distribution. Support tickets in practice are **right-skewed** — routine tickets vastly outnumber urgent ones.
 
-2. **All-LLM approach (everything via prompts):**
-   - Number of LLM calls per ticket: ___
-   - Estimated tokens per call: ___
-   - Estimated cost per ticket: $___
+**Estimated distribution:**
 
-3. **Savings:**
-   - Cost reduction: ___%
-   - Why: [Explain what you avoided by using deterministic code]
+| Tier | Priority | % of tickets | Model assigned |
+|---|---|---|---|
+| General Queue | < 60 | ~65% | Haiku ($0.25/$1.25 per M in/out) |
+| Standard Support | 60-99 | ~25% | Sonnet ($3/$15 per M in/out) |
+| Tier-1 Immediate | >= 100 | ~10% | Opus ($15/$75 per M in/out) |
+
+**Rationale for tiered models:** Highest-priority customers justify the best models — they represent the highest business value and risk.
+
+### 1. Hybrid approach (2 LLM calls + 2 deterministic):
+
+- LLM calls per ticket: **2** (Step 1: Extract & Classify, Step 4: Response Generation)
+- Total tokens per ticket: **~1,400 input / ~350 output**
+
+| Tier | Input cost | Output cost | Per ticket |
+|---|---|---|---|
+| Haiku | $0.00035 | $0.00044 | **$0.0008** |
+| Sonnet | $0.0042 | $0.0053 | **$0.0095** |
+| Opus | $0.021 | $0.026 | **$0.047** |
+
+### 2. All-LLM approach (5 calls, one per step):
+
+- LLM calls per ticket: **5** (extract, classify, prioritize, route, generate)
+- Total tokens per ticket: **~2,650 input / ~650 output**
+
+| Tier | Input cost | Output cost | Per ticket |
+|---|---|---|---|
+| Haiku | $0.00066 | $0.00081 | **$0.0015** |
+| Sonnet | $0.0080 | $0.0098 | **$0.018** |
+| Opus | $0.040 | $0.049 | **$0.089** |
+
+### 3. Savings:
+
+**Weighted average per ticket (across distribution):**
+
+| Approach | Weighted cost/ticket | At 100K tickets/month |
+|---|---|---|
+| Hybrid | **$0.0076** | **$760** |
+| All-LLM | **$0.014** | **$1,440** |
+| **Savings** | **~47%** | **$680/month** |
+
+**Why:** Deterministic code for Steps 2-3 eliminates 3 LLM calls per ticket. But the savings are not evenly distributed — **Tier-1 tickets drive most of the savings despite being only 10% of volume**. At Opus pricing, the hybrid saves $0.042 per ticket ($0.047 vs $0.089). The most expensive model is exactly where eliminating unnecessary LLM calls matters most.
+
+**Beyond cost — non-monetary savings:**
+- **Latency**: 2 API round-trips vs 5
+- **Determinism**: Steps 2-3 produce identical results every time — no risk of LLM arithmetic errors or invented routing rules
+- **Debuggability**: When routing is wrong, you check the code, not guess what the LLM was thinking
 
 ---
 
@@ -179,7 +247,13 @@ Output: Routed ticket + template
 Based on this exercise, what heuristic would you use to decide "LLM or code?" for a given step?
 
 **Your answer:**
-[Write your answer here when you do this exercise]
+
+**Determinism is the heuristic.** Do I need a specific, computable result (deterministic → code), or do I need a qualitative result that requires human-like reasoning and judgment (non-deterministic → LLM)?
+
+- **Deterministic** (one correct answer, computable): Steps 2-3 → code
+- **Non-deterministic** (requires interpretation, judgment, generation): Steps 1, 4 → LLM
+
+The key qualifier is "qualitative" — it's not just "varied output" (a random number generator does that). It's that the task requires **human-like judgment** to produce a good result, and "good" can't be reduced to a formula.
 
 ---
 
@@ -187,7 +261,28 @@ Based on this exercise, what heuristic would you use to decide "LLM or code?" fo
 What are the tradeoffs of breaking this into multiple steps versus trying to do it all in one large prompt?
 
 **Your answer:**
-[Write your answer here when you do this exercise]
+
+**For chaining (multiple steps):**
+- **Debuggability**: A large prompt has many interacting elements creating a vast number of costly permutations to test. Isolating failures in a single-responsibility step is straightforward.
+- **Human comprehension**: Large prompts fail the golden guidance of "can a human understand it?" — humans understand short sets of guidance and struggle with long ones. LLMs behave similarly.
+- **Testability**: Each step can be tested independently with manageable permutations.
+
+**Against chaining (single prompt):**
+- **Token efficiency**: Single prompt avoids repeating context across multiple calls.
+- **Developer experience**: Similar to splitting code across multiple files — all the "code" for an operation isn't in front of you at once.
+- **Error propagation**: This is the critical tradeoff. In a chain, each step's mistakes feed into the next silently. If Step 1 misclassifies a ticket, Steps 2-4 all operate on wrong data. In a single prompt, the LLM has full context and might self-correct — while generating routing info it could "notice" an inconsistency with its earlier classification.
+
+**Latency** is also a real cost of chaining. Drawing from accessibility experience with real-time communications: high latency is the primary factor in compromised RTC UX. The same principle applies here — each sequential API call is dead air for whoever is waiting. The person waiting doesn't care about your architecture, they care that nothing is happening.
+
+**Mitigation applied in this design:** Passing the original ticket body directly to Step 4 (bypassing the middle pipeline) partially addresses error propagation — if Step 1 missed a nuance, Step 4 still has the raw source.
+
+| | Chaining | Single prompt |
+|---|---|---|
+| Debuggability | Easy — isolate the failing step | Hard — which part went wrong? |
+| Testing | Manageable permutations per step | Combinatorial explosion |
+| Error propagation | Compounds through steps | Self-correcting (full context) |
+| Token cost | Higher (repeated context) | Lower |
+| Latency | Multiple round-trips | Single round-trip |
 
 ---
 
@@ -195,7 +290,17 @@ What are the tradeoffs of breaking this into multiple steps versus trying to do 
 Which techniques from Chapters 1-9 were most critical for this task, and why?
 
 **Your answer:**
-[Write your answer here when you do this exercise]
+
+**#1 most critical: Anti-hallucination (Ch 8)** — specifically the context-adapted modification. The other techniques (role, data separation, output formatting) improve response quality. Anti-hallucination **prevents catastrophic failure**. There's a severity hierarchy: "this response could be warmer" vs "we just promised a customer something we can't deliver."
+
+Critically, Ch 8 was not applied out of the box — it was adapted. "If you don't know, say I don't know" became "If you don't know, escalate to a specialist." This required understanding *why* the technique exists (prevent confident fabrication), not just *how* to apply it (add an escape hatch). The modification preserves customer momentum toward resolution instead of leaving them stranded.
+
+**Also critical:**
+- **Ch 3 (Role Prompting)**: Defined the CSR persona's tone and investment level
+- **Ch 4 (Data Separation)**: XML tags prevented prompt injection and cleanly separated three data sources in Step 4
+- **Ch 5 (Output Formatting + Prefilling)**: Forced structured JSON in Step 1 and `<draft_response>` format in Step 4
+
+All techniques from Chapters 1-9 were useful, but the severity hierarchy matters: some improve quality, one prevents disaster.
 
 ---
 
@@ -211,7 +316,21 @@ Think about:
 - Data privacy
 
 **Your answer:**
-[Write your answer here when you do this exercise]
+
+**Observability first:** Before deployment, work with the observability team to ensure the system can catch errors and capture data for identifying edge cases specific to this pipeline. Cost estimates from the analysis need to be validated in production — they are theoretical until real traffic hits the system.
+
+**Latency management:** Each sequential API call is latency the customer feels. The hybrid approach (2 LLM calls vs 5) already mitigates this. Further optimization: deterministic Steps 2-3 execute so fast they're negligible, and could potentially be parallelized with Step 4 prompt assembly.
+
+**Data privacy — the critical gap:**
+
+Support tickets contain PII: customer names, transaction amounts, account history, lifetime value. Every LLM call sends this data to an external API. This intersects with GDPR, SOC2, HIPAA, PCI-DSS, and internal data governance policies.
+
+**Decision framework for model hosting:**
+- **API (preferred)**: Higher performance for lower cost. Viable if an API provider is accredited for the compliance framework the organization is beholden to.
+- **Self-hosted**: Required only in austere IT environments where data security is the utmost concern. High cost relative to performance — requires stakeholder alignment on the investment.
+- **Middle ground — PII scrubbing**: Strip identifiable data before LLM calls (e.g., "Jane Smith" → `[CUSTOMER_1]`), process anonymized text, re-hydrate after. Keeps API cost/performance while reducing PII exposure. But adds engineering complexity, and customer language patterns + situational details can still be identifying even without explicit PII.
+
+**Approach:** Document the risk, technical options, and tradeoffs. Let compliance make the decision — they own the risk tolerance for the organization. Provide them the information to make an informed decision that meets organizational goals. An engineer should not unilaterally decide what's "secure enough."
 
 ---
 
@@ -219,14 +338,14 @@ Think about:
 
 You've successfully demonstrated mastery if your solution:
 
-- [ ] Uses a hybrid approach (both LLM and deterministic code)
-- [ ] Clearly justifies each LLM vs code decision
-- [ ] Applies multiple techniques from Chapters 1-9 appropriately
-- [ ] Demonstrates cost-conscious architecture
-- [ ] Handles the business rules deterministically (not via LLM)
-- [ ] Uses LLM for tasks requiring understanding/reasoning/generation
-- [ ] Shows understanding of chaining tradeoffs
-- [ ] Considers production concerns
+- [x] Uses a hybrid approach (both LLM and deterministic code)
+- [x] Clearly justifies each LLM vs code decision
+- [x] Applies multiple techniques from Chapters 1-9 appropriately
+- [x] Demonstrates cost-conscious architecture
+- [x] Handles the business rules deterministically (not via LLM)
+- [x] Uses LLM for tasks requiring understanding/reasoning/generation
+- [x] Shows understanding of chaining tradeoffs
+- [x] Considers production concerns
 
 ---
 
@@ -575,8 +694,8 @@ ASSISTANT: <draft_response>
 
 **Remaining Items:**
 - [x] ~~Draft actual Step 4 prompt~~
-- [ ] Architecture diagram
-- [ ] Cost analysis (hybrid vs all-LLM)
-- [ ] Reflection questions (4 questions)
+- [x] ~~Architecture diagram~~
+- [x] ~~Cost analysis (hybrid vs all-LLM)~~
+- [x] ~~Reflection questions (4 questions)~~
 
-**Ready to review?** When you've completed this exercise, we can discuss your solution and identify any gaps or areas for improvement.
+**Sanity check complete.** All steps designed, all reflection questions answered, all success criteria met.
