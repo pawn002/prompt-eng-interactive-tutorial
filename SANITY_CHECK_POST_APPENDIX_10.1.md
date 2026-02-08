@@ -453,10 +453,12 @@ Satisfying these three needs builds **trust**, which manifests as continued cust
 2. **Step 1 output** — for accurate issue characterization (category, severity, core_issue)
 3. **Step 3 output** — for routing facts and customer expectations (where their ticket is going, who's involved)
 
-**Techniques to Apply:**
+**Techniques Applied:**
 - **Ch 3 (Role Prompting)**: Senior CSR with helpful, compassionate tone showing obvious investment in making the customer whole
 - **Ch 4 (Data Separation)**: XML tags separating the three data sources (`<original_ticket>`, `<classification>`, `<routing>`)
 - **Ch 2 (Clear Instructions)**: Structural direction — acknowledge → validate → inform → empower
+- **Ch 7 (Few-Shot Examples)**: Good/bad examples with explicit annotations showing correct and incorrect behavior
+- **Ch 5 (Output Formatting + Prefilling)**: `<draft_response>` prefill forces output format
 - **Ch 8 (Hallucination Prevention)**: Context-adapted escape hatch (see below)
 
 **Critical: Anti-Hallucination for Customer-Facing Output**
@@ -475,15 +477,104 @@ This constrains the LLM to only state what it can source from the XML-tagged dat
 | Analytical/internal | "Say I don't know" | Accuracy > completeness |
 | Customer-facing | "Escalate to human" | Preserves customer's sense of control |
 
-**Input:** Original ticket body + Step 1 output + Step 3 output
-**Output:** Draft customer response template for support agent review
+**Few-Shot Example Decision:**
+- Included despite risk of templated feel — without examples, more opportunity for inappropriate responses
+- **Data flywheel insight**: Day one, ship hand-crafted examples. Over time, high-rated real customer responses replace them. Examples become a living quality benchmark, not a static template.
 
-**Status:** Design thinking complete. Actual prompt draft pending — want to mull before writing.
+**Tiered Review Strategy (Production Insight):**
+- Original design framed output as "draft for human agent review" — but blanket human review is costly
+- Better approach: map review strategy to routing tier
+
+| Route | Review Strategy | Why |
+|---|---|---|
+| Tier-1 Immediate Response | Human review before send | High-value customer, high stakes |
+| Standard Support | Could go either way | Cost/risk tradeoff |
+| General Queue | Send directly, audit for QA | Low risk, high volume |
+
+- Prompt should NOT hardcode "will be reviewed by a human" — review strategy is the system's concern, not the LLM's
+- Lower tiers use post-hoc auditing; pivot to human review if QA data shows degradation
+
+**Implementation — Final Prompt:**
+
+```
+USER:
+You are a senior customer service representative known for making
+customers feel genuinely heard and supported. Your tone is warm,
+professional, and shows clear investment in resolving the customer's
+issue.
+
+Your task is to draft a response to a customer support ticket.
+
+<original_ticket>
+{ORIGINAL_TICKET_BODY}
+</original_ticket>
+
+<classification>
+{STEP_1_OUTPUT_JSON}
+</classification>
+
+<routing>
+{STEP_3_OUTPUT_JSON}
+</routing>
+
+Structure your response following this flow:
+1. Acknowledge — Reference the customer's specific situation using
+   their own language. Show you understand what they're experiencing.
+2. Validate — Affirm that their frustration or urgency is legitimate.
+   Do not minimize.
+3. Inform — Tell them where their ticket has been routed and who will
+   be handling it, using only facts from the routing data above.
+4. Empower — Give them a clear next step or expectation so they feel
+   in control of the process.
+
+<examples>
+GOOD EXAMPLE:
+Ticket: "I've been trying to log in for 2 hours, getting error 403.
+I need to approve a $50k transaction before end of business today."
+Routing: Tier-1 Immediate Response, cc: Engineering Team
+
+Response: "I can see you've been locked out for the past two hours
+with a 403 error, and I understand the urgency — you have a $50,000
+transaction that needs approval today. That is absolutely a priority.
+Your ticket has been escalated to our Tier-1 Immediate Response team,
+and our Engineering Team has been notified about the 403 error. A
+specialist will reach out to you shortly with next steps to restore
+your access."
+
+[Why good: References "two hours" and "$50k transaction" from
+customer's own words. Validates urgency without minimizing. States
+only routing facts. Ends with clear expectation.]
+
+BAD EXAMPLE:
+Ticket: Same as above
+Response: "Sorry for the inconvenience. We'll have this fixed within
+30 minutes. Your password has been reset and you should be able to
+log in now."
+
+[Why bad: "30 minutes" is a fabricated timeline. Claims password was
+reset — hallucinated action. Generic "sorry for the inconvenience"
+doesn't reference the customer's actual situation. No mention of
+routing.]
+</examples>
+
+CRITICAL: Only state facts explicitly present in the data above. If
+you are uncertain about resolution timelines, available remedies, or
+any commitment beyond what is explicitly stated in the routing data,
+do not guess. Instead, indicate that a specialist from the assigned
+team will follow up with specific details.
+
+ASSISTANT: <draft_response>
+```
+
+**Input:** Original ticket body + Step 1 output + Step 3 output
+**Output:** Draft customer response
+
+**Status:** Step 4 complete (design + prompt).
 
 ---
 
 **Remaining Items:**
-- [ ] Draft actual Step 4 prompt
+- [x] ~~Draft actual Step 4 prompt~~
 - [ ] Architecture diagram
 - [ ] Cost analysis (hybrid vs all-LLM)
 - [ ] Reflection questions (4 questions)

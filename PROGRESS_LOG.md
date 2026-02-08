@@ -376,9 +376,15 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
     - Real-world precedent: airline chatbot promising invalid compensation
     - Principle: escape hatch must match the context (internal → admit uncertainty; customer-facing → escalate with continuity)
   - Techniques: Role prompting (Ch 3), XML data separation (Ch 4), clear structural direction (Ch 2), modified anti-hallucination (Ch 8)
-- **Status**: All 4 steps designed. Still need: draft Step 4 prompt, architecture diagram, cost analysis, reflection questions.
+- **Step 4 prompt drafted and finalized**
+  - Added few-shot examples (good + bad with `[Why good/bad]` annotations)
+    - **Data flywheel insight** ⭐: Examples aren't static — over time, high-rated real responses replace hand-crafted ones. Examples become a living quality benchmark.
+  - Removed "will be reviewed by human agent" framing — review strategy is the system's concern
+  - **Tiered review strategy** ⭐: Map review intensity to routing tier (Tier-1 = human review before send, General Queue = send directly + audit for QA). Pivot if QA data shows degradation.
+  - Prefill with `<draft_response>` to force output format (Ch 5)
+- **Status**: All 4 steps complete (design + implementation). Remaining: architecture diagram, cost analysis, reflection questions.
 
-**Next**: Draft Step 4 prompt, then complete architecture diagram, cost analysis, and reflection questions
+**Next**: Complete architecture diagram, cost analysis, and reflection questions
 
 ---
 
