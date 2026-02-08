@@ -394,6 +394,12 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
   - Q4: Observability first; data privacy decision framework (API vs self-hosted vs PII scrubbing); let compliance own the risk decision
 - **Status**: ✅ **Sanity check COMPLETE.** All success criteria met.
 
+**Post-Sanity Check Meta-Learning:**
+
+- **Bring your coherent sense of self into new domains** ⭐: Data privacy is normally a core competency, but it wasn't top of mind during this exercise. New domains create cognitive load that can displace existing expertise. The lesson: existing knowledge doesn't pause while learning new skills — it should run in parallel. Don't become "prompt engineering student" at the expense of "data privacy wonk." Bring the full self forward.
+
+- **Error propagation in LLM chains = garbage in/garbage out in code pipelines** ⭐: Failed to catch this independently despite it being the same structural problem as in deterministic code. LLM chains *feel* different from code pipelines — each step looks like a fresh "conversation," creating an illusion of independence. But structurally, it's the same dependency chain. When designing any multi-step pipeline (LLM or otherwise), ask: "What happens when an upstream step is wrong?"
+
 **Next**: Begin Appendix 10.2 — Tool Use
 
 ---
