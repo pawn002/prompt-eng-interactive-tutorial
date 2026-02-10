@@ -402,6 +402,21 @@ BadRequestError: Your credit balance is too low to access the Anthropic API
 
 **Next**: Begin Appendix 10.2 — Tool Use
 
+**Session (2026-02-09):**
+- 🔄 **Started Appendix 10.2 — Tool Use**
+- Fixed deprecated model error: `claude-3-sonnet-20240229` → `claude-sonnet-4-5-20250929` (404 not found — model retired)
+- **Notebook tool use approach is outdated** ⚠️
+  - Notebook teaches the **old XML-based approach**: tool definitions in system prompt, `<function_calls>` XML blocks, stop sequences to detect calls, manual string parsing to extract parameters, manual `<function_results>` XML construction
+  - **Current API has native tool use support**:
+    - `tools` parameter in API call with JSON schema definitions
+    - Claude returns structured `tool_use` content blocks (not XML)
+    - Stop reason `tool_use` replaces stop sequences
+    - Tool inputs are already parsed JSON — no manual parsing needed
+    - `tool_result` content blocks to send results back (structured, not XML)
+    - Higher-level: `@beta_tool` decorator + `tool_runner` handles the entire loop automatically
+  - **Core concepts are still valid** — tool use is still prompt chaining with substitution. But the implementation is entirely different now.
+  - Notebook's own roadmap note (cell-5) predicted this change; it has since shipped.
+
 ---
 
 ## Test Case Generation Strategy (2026-02-01)
